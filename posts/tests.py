@@ -25,7 +25,7 @@ class HomepageTest(TestCase):
     def setUp(self) -> None:
         for i in range(10):
             characters = string.ascii_letters + string.digits
-            title = ''.join(secrets.choice(characters) for _ in range(10))
+            title = "Sample Test {i}".format(i=i)
             body = ''.join(secrets.choice(characters) for _ in range(200))
             Post.objects.create(title=title,body=body)
         
@@ -34,3 +34,9 @@ class HomepageTest(TestCase):
 
         self.assertTemplateUsed(response,'posts/index.html')
         self.assertEqual(response.status_code,HTTPStatus.OK)
+    
+    def test_homepage_returns_post_list(self):
+        response = self.client.get('/')
+        
+        self.assertContains(response,"Sample Test 5")
+        self.assertContains(response,"Sample Test 4")
